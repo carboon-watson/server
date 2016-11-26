@@ -16,7 +16,7 @@ These python libraries are the requirements
 To install just run these command:
 
 ```bash
-> sudo apt-get install gcc g++ python-dev portaudio19-dev libyaml-dev 
+> sudo apt-get install gcc g++ python-dev portaudio19-dev libyaml-dev ffmpeg
 > sudo pip install -r requirements.txt
 > git clone https://github.com/Adirockzz95/Piwho.git
 > cd Piwho

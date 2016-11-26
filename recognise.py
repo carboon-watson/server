@@ -1,5 +1,6 @@
 import shutil
 import uuid
+import os, os.path
 from piwho import recognition
 
 MAX_RECOGNISE_RATE = 0.40
@@ -24,5 +25,7 @@ def recognise_voice(filename):
         return None
     return dict(name=name, rate=rate)
 
-def collect(name, filename):
-    shutil.copy(filename, './records/{}/{}'.format(name, uuid.uuid4()))
+def collect(id, filename):
+    filecount = len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join('./records/{}/'.format(id), name))])
+    p, e, = filename.split('.')
+    shutil.copy(filename, './records/{}/sample-{}.{}'.format(id, filecount, e))

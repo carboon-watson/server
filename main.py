@@ -8,7 +8,6 @@ import recognise
 import watson
 
 def file_to_base64(filename):
-    filename = watson.text_to_speech(text)
     with open(filename, 'rb') as file:
         return base64.b64encode(file.read())
 

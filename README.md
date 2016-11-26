@@ -13,10 +13,14 @@ These python libraries are the requirements
   * piwho
   
 # Install
-To install just run this command:
+To install just run these command:
 
 ```bash
-> pip3 install -r requirements.txt
+> sudo apt-get install gcc g++ python-dev portaudio19-dev libyaml-dev ffmpeg openjdk-8-jdk
+> sudo pip install -r requirements.txt
+> git clone https://github.com/Adirockzz95/Piwho.git
+> cd Piwho
+> sudo python setpu.py install
 ```
 
 # Usage
@@ -24,5 +28,5 @@ To install just run this command:
 After installing requirements you need to run the following command:
 
 ```bash
-> python3 main.py
+> python main.py
 ```

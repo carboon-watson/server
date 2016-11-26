@@ -3,7 +3,6 @@ import json
 
 from watson_developer_cloud import SpeechToTextV1, TextToSpeechV1, ToneAnalyzerV3
 
-
 def speech_to_text(filename, content_type='audio/wav', model='en-US_NarrowbandModel'):
     speech_to_text = SpeechToTextV1(
         username='0ca0d966-fa1d-4d11-90bc-568ce6517f78',
@@ -20,8 +19,8 @@ def speech_to_text(filename, content_type='audio/wav', model='en-US_NarrowbandMo
 
 def text_to_speech(text):
     text_to_speech = TextToSpeechV1(
-        username='b32dfcec-f696-4ee3-8dc2-55fd8e540d84',
-        password='pmewtLPMFtvE',
+        username='e45245de-a3b2-4198-b233-96e9f46eb8b0',
+        password='XPpKgmuH2v5Q',
         x_watson_learning_opt_out=True)  # Optional flag
     #print(json.dumps(text_to_speech.voices(), indent=2))
     filename = '/tmp/{}.wav'.format(uuid.uuid4())

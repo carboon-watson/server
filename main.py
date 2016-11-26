@@ -26,7 +26,9 @@ def authtenticate():
     stream = params.get('stream')
     filename = convert_stream(stream, 'm4a', 'wav')
     print(filename)
-    return dict(result=recognise.recognise_voice(filename))
+    result = dict(result=recognise.recognise_voice(filename))
+    print(result)
+    return result
 
 @post('/speech/text')
 def speech_to_text():

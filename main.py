@@ -32,7 +32,7 @@ def authtenticate():
     result = recognise.recognise_voice(filename)
     if result is not None:
         voice_filename = watson.text_to_speech('Hello {}!'.format(result.get('name')))
-        result.voice_message = file_to_base64(voice_filename)
+        result['voice_message'] = file_to_base64(voice_filename)
         return dict(result=result)
     else:
         voice_filename = watson.text_to_speech('Sorry, I could not recognise you.')

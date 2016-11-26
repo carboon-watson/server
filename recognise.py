@@ -1,11 +1,14 @@
+import shutil
+import uuid
 from piwho import recognition
 
 MAX_RECOGNISE_RATE = 0.40
 
 rc = recognition.SpeakerRecognizer()
 
-rc.train_new_data('./records/majid-1.wav', 'Majid')
-rc.train_new_data('./records/abi-1.wav', 'Abi')
+rc.train_new_data('./records/majid', 'majid')
+rc.train_new_data('./records/abi', 'abi')
+rc.train_new_data('./records/adela', 'adela')
 
 def recognise_voice(filename):
     name = rc.identify_speaker(filename)
@@ -20,3 +23,6 @@ def recognise_voice(filename):
     if rate > MAX_RECOGNISE_RATE:
         return None
     return dict(name=name, rate=rate)
+
+def collect(name, filename):
+    shutil.copy(filename, './records/{}/{}'.format(name, uuid.uuid4()))

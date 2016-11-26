@@ -8,6 +8,7 @@ import recognise
 import watson
 
 def file_to_base64(filename):
+    return None
     with open(filename, 'rb') as file:
         return base64.b64encode(file.read())
 

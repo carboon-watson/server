@@ -8,7 +8,6 @@ import recognise
 import watson
 
 def file_to_base64(filename):
-    return None
     with open(filename, 'rb') as file:
         return base64.b64encode(file.read())
 
@@ -31,6 +30,7 @@ def authtenticate():
     stream = params.get('stream')
     filename = convert_stream(stream, 'm4a', 'wav')
     result = recognise.recognise_voice(filename)
+    print(result)
     if result is not None:
         voice_filename = watson.text_to_speech('Hello {}!'.format(result.get('name')))
         result['voice_message'] = file_to_base64(voice_filename)

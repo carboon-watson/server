@@ -28,5 +28,5 @@ To install just run these command:
 After installing requirements you need to run the following command:
 
 ```bash
-> python3 main.py
+> python main.py
 ```

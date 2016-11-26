@@ -7,6 +7,11 @@ from pydub import AudioSegment
 import recognise
 import watson
 
+def file_to_base64(filename):
+    filename = watson.text_to_speech(text)
+    with open(filename, 'rb') as file:
+        return base64.b64encode(file.read())
+
 
 def convert_stream(stream, ext='wav', to='wav', parameters=None):
     binary = base64.b64decode(stream)
@@ -25,11 +30,15 @@ def authtenticate():
     params = request.json.get('params')
     stream = params.get('stream')
     filename = convert_stream(stream, 'm4a', 'wav')
-    print(filename)
-    result = dict(result=recognise.recognise_voice(filename))
-    print(result)
-    #recognise.collect('adela', filename)
-    return result
+    result = recognise.recognise_voice(filename)
+    if result is not None:
+        voice_filename = watson.text_to_speech('Hello {}!'.format(result.get('name')))
+        result.voice_message = file_to_base64(voice_filename)
+        return dict(result=result)
+    else:
+        voice_filename = watson.text_to_speech('Sorry, I could not recognise you.')
+        voice_message = file_to_base64(voice_filename)
+        return dic(result=dict(name=None, voice_message=voice_message))
 
 @post('/speech/text')
 def speech_to_text():
@@ -45,15 +54,14 @@ def text_to_speech():
     text = params.get('text')
     filename = watson.text_to_speech(text)
     with open(filename, 'rb') as file:
-        return dict(content=base64.b64encode(file.read()))
+        return dict(result=base64.b64encode(file.read()))
 
 @post('/text/tone')
 def analyze_tone():
     params = request.json.get('params')
     text = params.get('text')
     filename = watson.text_to_speech(text)
-    with open(filename, 'rb') as file:
-        return dict(content=base64.b64encode(file.read()))
+    return dict(result=base64.b64encode(file.read()))
 
 
 #watson.speech_to_text('/home/abi/Downloads/0001.flac')

@@ -20,7 +20,7 @@ def convert_stream(stream, ext='wav', to='wav', parameters=None):
         return new_filename
     return filename
 
-@get('/auth')
+@post('/auth')
 def authtenticate():
     params = request.json.get('params')
     stream = params.get('stream')
@@ -28,7 +28,7 @@ def authtenticate():
     print(filename)
     return dict(result=recognise.recognise_voice(filename))
 
-@get('/speech/text')
+@post('/speech/text')
 def speech_to_text():
     params = request.json.get('params')
     stream = params.get('stream')
@@ -36,7 +36,7 @@ def speech_to_text():
     filename = convert_stream(stream, stream_type, 'flac')
     return watson.speech_to_text(filename, content_type='audio/flac')
 
-@get('/text/speech')
+@post('/text/speech')
 def text_to_speech():
     params = request.json.get('params')
     text = params.get('text')
@@ -44,7 +44,7 @@ def text_to_speech():
     with open(filename, 'rb') as file:
         return dict(content=base64.b64encode(file.read()))
 
-@get('/text/tone')
+@post('/text/tone')
 def analyze_tone():
     params = request.json.get('params')
     text = params.get('text')

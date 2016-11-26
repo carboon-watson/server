@@ -27,6 +27,6 @@ def recognise_voice(filename):
 
 def collect(id, filename):
     outpath = './records/{}/'.format(id)
-    filecount = len([name for name in os.listdir(outpath) if os.path.isfile(os.path.join(outpath, name))])
+    filecount = len([name for name in os.listdir(outpath) if os.path.isfile(os.path.join(outpath, name))]) + 1
     p, e, = filename.split('.')
     shutil.copy(filename, '{}sample-{}.{}'.format(outpath, filecount, e))

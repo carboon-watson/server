@@ -37,7 +37,7 @@ def authtenticate():
     else:
         voice_filename = watson.text_to_speech('Sorry, I could not recognise you.')
         voice_message = file_to_base64(voice_filename)
-        return dict(result=dict(name=None, voice_message=voice_message))
+        return dict(result=dict(name='', voice_message=voice_message))
 
 @post('/speech/text')
 def speech_to_text():

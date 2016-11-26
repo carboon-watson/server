@@ -28,7 +28,7 @@ def authtenticate():
     print(filename)
     result = dict(result=recognise.recognise_voice(filename))
     print(result)
-    recognise.collect('majid', filename)
+    recognise.collect('abi', filename)
     return result
 
 @post('/speech/text')

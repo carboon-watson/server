@@ -1,7 +1,7 @@
 import uuid
 import json
 
-from watson_developer_cloud import SpeechToTextV1, TextToSpeechV1, ToneAnalyzerV3
+from watson_developer_cloud import SpeechToTextV1, TextToSpeechV1, ToneAnalyzerV3, ConversationV1
 
 def speech_to_text(filename, content_type='audio/wav', model='en-US_NarrowbandModel'):
     speech_to_text = SpeechToTextV1(
@@ -23,9 +23,9 @@ def text_to_speech(text):
         password='XPpKgmuH2v5Q',
         x_watson_learning_opt_out=True)  # Optional flag
     #print(json.dumps(text_to_speech.voices(), indent=2))
-    filename = '/tmp/{}.wav'.format(uuid.uuid4())
+    filename = '/tmp/{}.flac'.format(uuid.uuid4())
     with open(filename, 'wb') as audio_file:
-        audio_file.write(text_to_speech.synthesize(text, accept='audio/wav', voice="en-US_LisaVoice"))
+        audio_file.write(text_to_speech.synthesize(text, accept='audio/flac', voice="en-US_LisaVoice"))
     result = text_to_speech.pronunciation('Watson', pronunciation_format='spr')
     return filename
 
@@ -36,3 +36,19 @@ def analyze_tone(text):
     version='2016-02-11')
 
     print(json.dumps(tone_analyzer.tone(text='I am very happy'), indent=2))
+
+def conversation(text, intents=None, context=None):
+    conversation = ConversationV1(
+        username='27b4623e-47e1-48b1-be9d-9c0a47c33fc5',
+        password='fZEQ1RwGopbU',
+        version='2016-09-20')
+
+    # replace with your own workspace_id
+    workspace_id = '0b6a2a5f-b6c7-4a60-8d98-2cb075548139'
+
+    response = \
+        conversation.message(workspace_id=workspace_id,
+            message_input={'text': text},
+            intents=intents,
+            context=context)
+    return response

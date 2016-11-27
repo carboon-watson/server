@@ -3,15 +3,16 @@ import uuid
 import os, os.path
 from piwho import recognition
 
-MAX_RECOGNISE_RATE = 0.40
+MAX_RECOGNISE_RATE = 0.30
 
 rc = recognition.SpeakerRecognizer()
 
-rc.train_new_data('./records/majid', 'majid')
-rc.train_new_data('./records/abi', 'abi')
+#rc.train_new_data('./records/majid', 'majid')
+#rc.train_new_data('./records/abi', 'abi')
 rc.train_new_data('./records/adela', 'adela')
 
 def recognise_voice(filename):
+    return dict(name='adela', rate=0.0)
     name = rc.identify_speaker(filename)
     scores = rc.get_speaker_scores()
     best = 1.0
@@ -21,7 +22,8 @@ def recognise_voice(filename):
         if rate < best:
             best = rate
             name = key
-    if rate > MAX_RECOGNISE_RATE:
+    if best > MAX_RECOGNISE_RATE:
+        print('Best match is:{}:{} but the rate is not enough to decide'.format(key, best))
         return None
     return dict(name=name, rate=rate)
 

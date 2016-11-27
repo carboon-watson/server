@@ -1,5 +1,7 @@
 import uuid
 import base64
+import codecs
+import json
 
 from bottle import run, get, post, request
 from pydub import AudioSegment
@@ -9,7 +11,11 @@ import watson
 
 def file_to_base64(filename):
     with open(filename, 'rb') as file:
-        return base64.b64encode(file.read())
+        return str(base64.b64encode(file.read()))
+
+def file_to_hex(filename):
+    with open(filename, 'rb') as file:
+        return codecs.encode(file.read(), 'hex').decode()
 
 
 def convert_stream(stream, ext='wav', to='wav', parameters=None):
@@ -33,11 +39,12 @@ def authtenticate():
     print(result)
     if result is not None:
         voice_filename = watson.text_to_speech('Hello {}!'.format(result.get('name')))
-        result['voice_message'] = file_to_base64(voice_filename)
+        result['voice_message'] = file_to_hex(voice_filename)
         return dict(result=result)
     else:
+        #recognise.collect('adela', filename)
         voice_filename = watson.text_to_speech('Sorry, I could not recognise you.')
-        voice_message = file_to_base64(voice_filename)
+        voice_message = file_to_hex(voice_filename)
         return dict(result=dict(name=None, voice_message=voice_message))
 
 @post('/speech/text')
@@ -53,8 +60,7 @@ def text_to_speech():
     params = request.json.get('params')
     text = params.get('text')
     filename = watson.text_to_speech(text)
-    with open(filename, 'rb') as file:
-        return dict(result=base64.b64encode(file.read()))
+    return dict(result=file_to_hex(filename))
 
 @post('/text/tone')
 def analyze_tone():
@@ -63,6 +69,23 @@ def analyze_tone():
     filename = watson.text_to_speech(text)
     return dict(result=base64.b64encode(file.read()))
 
+@post('/command/analyse')
+def analyse_command():
+    params = request.json.get('params')
+    stream = params.get('stream')
+    intents = params.get('intents')
+    context = params.get('context')
+    print(context)
+    print(intents)
+    filename = convert_stream(stream, 'm4a', 'flac')
+    print(filename)
+    speech_data = watson.speech_to_text(filename, content_type='audio/flac', model='en-US_NarrowbandModel')
+    print(json.dumps(speech_data, indent=2))
+    text = speech_data['results'][0]['alternatives'][0]['transcript']
+    print('text:', text)
+    result = watson.conversation(text, context=context)
+    print(result)
+    return dict(result=result)
 
 #watson.speech_to_text('/home/abi/Downloads/0001.flac')
 #watson.speech_to_text('/home/abi/Downloads/Telegram Desktop/Start Jet Bank.m4a', content_type='audio/m4a')
@@ -73,5 +96,7 @@ def analyze_tone():
 #    filename = convert_stream(s, ext='m4a', to='wav', parameters='-ar 8000 -ac 1')
 #    print(filename)
 #    watson.speech_to_text(filename, content_type='audio/flac')
+
+#print(json.dumps(watson.conversation('I want to transfer money.'), indent=2))
 
 run(host='0.0.0.0', port=8080)
